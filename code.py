@@ -21,6 +21,8 @@ write_en_pre = write_en.value
 next_time = time.monotonic()
 time_inc = 1
 
+gsr = analogio.AnalogIn(board.A1)
+
 while True:
     # get the current time
     this_time = time.monotonic()
@@ -33,7 +35,7 @@ while True:
         # collect data
         # get the cpu temperature
         #temp_cpu = microcontroller.cpu.temperature
-        gsr = analogio.AnalogIn(board.A1)
+
         gsr_average = 0
 
         for x in range(10):

@@ -19,8 +19,9 @@ write_en.pull = Pull.UP
 write_en_pre = write_en.value
 
 next_time = time.monotonic()
-time_inc = 1
-
+time_inc = 5
+gsr = analogio.AnalogIn(board.A1)
+gsr_average = 0
 while True:
     # get the current time
     this_time = time.monotonic()
@@ -33,18 +34,18 @@ while True:
         # collect data
         # get the cpu temperature
         #temp_cpu = microcontroller.cpu.temperature
-        gsr = analogio.AnalogIn(board.A1)
-        gsr_average = 0
+
+
 
         for x in range(10):
             gsr_average += gsr.value
             time.sleep(0.005)
 
         gsr_average /= 10
-        print(gsr_average)
+        print((gsr_average,))
 
         # format a data string and print it for # DEBUG:
-        ds = '{:f},{:-}\n'.format(this_time, gsr_average)
+        ds = '{:n},{:-}\n'.format(this_time, gsr_average)
         print(ds)
 
         # sleep so you can see the status led blink:
@@ -57,7 +58,7 @@ while True:
             pixel.fill(0)
             # try to open the data_log file, then format and write the data
             try:
-                with open("/data_log.txt", "a") as dl:
+                with open("/data_collect.txt", "a") as dl:
                     dl.write(ds)
                     dl.flush()
                     for x in range(4):
@@ -75,4 +76,3 @@ while True:
                 print("Data not written")
     else:
         pixel.fill(0x00ff00)
-
